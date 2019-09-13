@@ -3,5 +3,6 @@
   "version": "1.0.0",
   "main": "index.js",
   "author": "Stefan Age",
+  "homepage": "https://github.com/sage911/js-utils",
   "license": "MIT"
 }
