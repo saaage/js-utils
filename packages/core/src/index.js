@@ -1,5 +1,8 @@
 import get from 'lodash.get'
 
+export const isObject = arg =>
+  Object.prototype.toString.call(arg) === '[object Object]'
+
 // is a thing null/undefined?
 export const isNil = arg => arg === null || arg === undefined
 
@@ -12,7 +15,7 @@ export const selectKeys = (obj, keys) => {
 
 // returns a new object with keys removed
 export const removeKeys = (obj, keys) => {
-  const clone = {...obj}
+  const clone = { ...obj }
   keys.forEach(k => delete clone[k])
   return clone
 }
@@ -41,6 +44,20 @@ export const contains = (coll, value, derive) => {
   return coll.indexOf(value) > -1 ? true : false
 }
 
+// takes a key value pair and returns true if value is an empty string
+export const objectValueIsEmptyString = (k, v) => v === ''
+
+// remove all members of an enumerable object where fn(i) returns true (where i is an iterable value of coll)
+export const remove = (obj, fn) => {
+  if (Array.isArray(obj)) return obj.filter(m => fn(m) === true)
+  if (isObject(obj)) {
+    const clone = { ...obj }
+    for (const key in clone) {
+      if (fn(key, clone[key]) === true) delete clone[key]
+    }
+    return clone
+  } else return obj
+}
 
 // removes the first instance of value from the collection
 export const removeValue = (coll, val) => {
@@ -57,7 +74,7 @@ export const update = (obj, key, fn) => {
 }
 
 export const compareUsingKey = (a, b, key) => {
-  if ((get(a, key)).toLowerCase() < get(b, key).toLowerCase()) return -1
+  if (get(a, key).toLowerCase() < get(b, key).toLowerCase()) return -1
   if (get(a, key).toLowerCase() > get(b, key).toLowerCase()) return 1
   return 0
 }
